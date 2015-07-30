@@ -24,6 +24,8 @@ lab.experiment('createStore', function(){
     reducers = {
       test: function(state, action){
         switch(action.type){
+          case 'TEST':
+            return 2;
           default:
             return 1;
         }
@@ -38,6 +40,16 @@ lab.experiment('createStore', function(){
     code.expect(store.getState).to.be.a.function();
     var state = store.getState();
     code.expect(state).to.contain({ test: 1 });
+    done();
+  });
+
+  lab.test('allows for no extra middleware', function(done){
+    var store = createStore(reducers);
+    code.expect(store.dispatch).to.be.a.function();
+    code.expect(store.getState).to.be.a.function();
+    store.dispatch({ type: 'TEST' });
+    var state = store.getState();
+    code.expect(state).to.contain({ test: 2 });
     done();
   });
 
