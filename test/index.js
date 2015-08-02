@@ -20,6 +20,7 @@ lab.experiment('createStore', function(){
   }
 
   lab.beforeEach(function(done){
+    process.env.NODE_ENV = 'production';
     middlewareCalls = 0;
     reducers = {
       test: function(state, action){
@@ -31,6 +32,11 @@ lab.experiment('createStore', function(){
         }
       }
     };
+    done();
+  });
+
+  lab.afterEach(function(done){
+    delete process.env.NODE_ENV;
     done();
   });
 
@@ -68,6 +74,14 @@ lab.experiment('createStore', function(){
     code.expect(store.getState).to.be.a.function();
     store.dispatch({ type: 'TEST' });
     code.expect(middlewareCalls).to.equal(1);
+    done();
+  });
+
+  lab.test('adds devtools store when NODE_ENV not "production"', function(done){
+    process.env.NODE_ENV = 'development';
+    var store = createStore(reducers);
+    code.expect(store.devToolsStore).to.be.an.object();
+    console.log(store);
     done();
   });
 });
