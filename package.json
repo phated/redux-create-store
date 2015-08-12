@@ -23,7 +23,8 @@
   },
   "devDependencies": {
     "code": "^1.5.0",
-    "lab": "^5.14.0"
+    "lab": "^5.14.0",
+    "lodash": "^3.10.1"
   },
   "keywords": [
     "clean",

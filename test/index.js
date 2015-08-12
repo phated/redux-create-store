@@ -1,5 +1,6 @@
 'use strict';
 
+var _ = require('lodash');
 var lab = exports.lab = require('lab').script();
 var code = require('code');
 
@@ -9,6 +10,7 @@ lab.experiment('createStore', function(){
 
   var reducers;
   var middlewareCalls;
+  var dispatchCalls;
 
   function testMiddleware(){
     return function(next){
@@ -19,8 +21,24 @@ lab.experiment('createStore', function(){
     };
   }
 
+  function testEnhancer(){
+    return function(createStore){
+      return function(reducer, initialState){
+        var store = createStore(reducer, initialState);
+
+        function testDispatch(){
+          dispatchCalls++;
+          return store.dispatch.apply(store, arguments);
+        }
+
+        return _.assign({}, store, { dispatch: testDispatch });
+      };
+    };
+  }
+
   lab.beforeEach(function(done){
     middlewareCalls = 0;
+    dispatchCalls = 0;
     reducers = {
       test: function(state, action){
         switch(action.type){
@@ -67,6 +85,37 @@ lab.experiment('createStore', function(){
     code.expect(store.dispatch).to.be.a.function();
     code.expect(store.getState).to.be.a.function();
     store.dispatch({ type: 'TEST' });
+    code.expect(middlewareCalls).to.equal(1);
+    done();
+  });
+
+  lab.test('takes an array of enhancers and returns a store', function(done){
+    var store = createStore(reducers, { enhancers: [testEnhancer()] });
+    code.expect(store.dispatch).to.be.a.function();
+    code.expect(store.getState).to.be.a.function();
+    store.dispatch({ type: 'TEST' });
+    code.expect(dispatchCalls).to.equal(1);
+    done();
+  });
+
+  lab.test('takes a single enhancer and returns a store', function(done){
+    var store = createStore(reducers, { enhancers: testEnhancer() });
+    code.expect(store.dispatch).to.be.a.function();
+    code.expect(store.getState).to.be.a.function();
+    store.dispatch({ type: 'TEST' });
+    code.expect(dispatchCalls).to.equal(1);
+    done();
+  });
+
+  lab.test('takes middleware and enhancers and returns a store', function(done){
+    var store = createStore(reducers, {
+      enhancers: [testEnhancer()],
+      middleware: [testMiddleware]
+    });
+    code.expect(store.dispatch).to.be.a.function();
+    code.expect(store.getState).to.be.a.function();
+    store.dispatch({ type: 'TEST' });
+    code.expect(dispatchCalls).to.equal(1);
     code.expect(middlewareCalls).to.equal(1);
     done();
   });
