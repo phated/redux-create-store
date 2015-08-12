@@ -54,7 +54,7 @@ lab.experiment('createStore', function(){
   });
 
   lab.test('takes an array of middleware and returns a store', function(done){
-    var store = createStore(reducers, [testMiddleware]);
+    var store = createStore(reducers, { middleware: [testMiddleware] });
     code.expect(store.dispatch).to.be.a.function();
     code.expect(store.getState).to.be.a.function();
     store.dispatch({ type: 'TEST' });
@@ -63,7 +63,7 @@ lab.experiment('createStore', function(){
   });
 
   lab.test('takes a single middleware and returns a store', function(done){
-    var store = createStore(reducers, testMiddleware);
+    var store = createStore(reducers, { middleware: testMiddleware });
     code.expect(store.dispatch).to.be.a.function();
     code.expect(store.getState).to.be.a.function();
     store.dispatch({ type: 'TEST' });
