@@ -61,6 +61,15 @@ lab.experiment('createStore', function(){
     done();
   });
 
+  lab.test('supports a single function as a reducer', function(done){
+    var store = createStore(reducers.test);
+    code.expect(store.dispatch).to.be.a.function();
+    code.expect(store.getState).to.be.a.function();
+    var state = store.getState();
+    code.expect(state).to.equal(1);
+    done();
+  });
+
   lab.test('allows for no extra middleware', function(done){
     var store = createStore(reducers);
     code.expect(store.dispatch).to.be.a.function();
