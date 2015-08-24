@@ -19,7 +19,12 @@ function createStore(reducers, config){
     extraMiddleware = [];
   }
 
-  var reducer = redux.combineReducers(reducers);
+  var reducer;
+  if(typeof reducers === 'function'){
+    reducer = reducers;
+  } else {
+    reducer = redux.combineReducers(reducers);
+  }
   var middleware = defaultMiddleware.concat(extraMiddleware);
   var middlewareStack = redux.applyMiddleware.apply(null, middleware);
   var enhancers = defaultEnhancers.concat(middlewareStack, extraEnhancers, redux.createStore);
