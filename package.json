@@ -18,7 +18,7 @@
     "test": "lab -cvL"
   },
   "dependencies": {
-    "redux": "^1.0.0-rc",
+    "redux": "^3.0.4",
     "redux-promise": "^0.5.0"
   },
   "devDependencies": {

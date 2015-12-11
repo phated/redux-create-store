@@ -27,8 +27,9 @@ function createStore(reducers, config){
   }
   var middleware = defaultMiddleware.concat(extraMiddleware);
   var middlewareStack = redux.applyMiddleware.apply(null, middleware);
-  var enhancers = defaultEnhancers.concat(middlewareStack, extraEnhancers, redux.createStore);
-  var storeCreator = redux.compose.apply(null, enhancers);
+  var enhancers = defaultEnhancers.concat(middlewareStack, extraEnhancers);
+  var composed = redux.compose.apply(null, enhancers);
+  var storeCreator = composed(redux.createStore);
   return storeCreator(reducer);
 }
 
