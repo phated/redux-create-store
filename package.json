@@ -4,7 +4,7 @@
   "description": "My custom store creator abstraction w/ my preferred middleware, etc",
   "author": "Blaine Bublitz <blaine@iceddev.com> (http://iceddev.com)",
   "contributors": [],
-  "repository": "phated/redux-create-store",
+  "repository": "parallaxinc/redux-create-store",
   "license": "MIT",
   "engines": {
     "node": ">= 0.10"
@@ -15,7 +15,7 @@
     "index.js"
   ],
   "scripts": {
-    "test": "lab -cvL"
+    "test": "lab -cvlL"
   },
   "dependencies": {
     "redux": "^3.0.4",
